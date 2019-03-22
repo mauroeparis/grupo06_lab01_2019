@@ -111,7 +111,7 @@ bi-dimensional donde $a$ indica el desplazamiento del origen, $b$ el
   (^^^) :: Dibujo a -> Dibujo a -> Dibujo a
 
   -- dada una figura la repite en cuatro cuadrantes
-  cuarteto :: Dibujo a -> Dibujo a
+  cuarteto :: Dibujo a -> Dibujo a -> Dibujo a -> Dibujo a
   
   -- una figura repetida con las cuatro rotaciones, superimpuestas.
   encimar4 :: Dibujo a -> Dibujo a 
@@ -130,7 +130,7 @@ bi-dimensional donde $a$ indica el desplazamiento del origen, $b$ el
   mapDib :: (a -> b) -> Dibujo a -> Dibujo b
   
   -- verificar que las operaciones satisfagan
-  -- 1. map pureDibe = id
+  -- 1. map id = id
   -- 2. map (g . f) = mapDib g . mapDib f
   
   -- 
