@@ -144,7 +144,7 @@ bi-dimensional donde `a` indica el desplazamiento del origen, `b` el
 
   -- estructura general para la semántica (a no asustarse. Ayuda:
   -- pensar en foldr y las definiciones
-  sem :: (a -> b) -> b -> (b -> b) -> (b -> b) -> (b -> b) ->
+  sem :: (a -> b) -> (b -> b) -> (b -> b) -> (b -> b) ->
          (Int -> Int -> b -> b -> b) ->
          (Int -> Int -> b -> b -> b) ->
 		 (b -> b -> b) ->
