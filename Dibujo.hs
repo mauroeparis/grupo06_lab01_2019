@@ -3,13 +3,14 @@ module Dibujo where
 
 -- data Basica a = trian1 a b c | trian2 a | trianD a | rectan a
 
-data Dibujo a = Basica a
-                | Rotar (Dibujo a)
-                | Espejar (Dibujo a)
-                | Rot45 (Dibujo a)
-                | Apilar Int Int (Dibujo a) (Dibujo a)
-                | Juntar Int Int (Dibujo a) (Dibujo a)
-                | Encimar (Dibujo a) (Dibujo a)
+data Dibujo a = Vacio
+              | Basica a
+              | Rotar (Dibujo a)
+              | Espejar (Dibujo a)
+              | Rot45 (Dibujo a)
+              | Apilar Int Int (Dibujo a) (Dibujo a)
+              | Juntar Int Int (Dibujo a) (Dibujo a)
+              | Encimar (Dibujo a) (Dibujo a)
 
 -- composición n-veces de una función con sí misma.
 comp :: (a -> a) -> Int -> (a -> a)
@@ -53,3 +54,18 @@ encimar4 d = Encimar (Encimar d (Rotar d)) (Encimar (r180 d) (r270 d))
 -- cuadrado con la misma figura rotada `i` por `90` para `i \in \{1..3\}`.
 ciclar :: Dibujo a -> Dibujo a
 ciclar d = Apilar 50 50 (Juntar 50 50 d (Rotar d)) (Juntar 50 50 (r180 d) (r270 d))
+
+-- ver un a como una figura
+bas :: a -> Dibujo a
+bas x = Basica x
+
+-- map para nuestro lenguaje
+mapDib :: (a -> b) -> Dibujo a -> Dibujo b
+mapDib (d1 -> Dibujo d1) d2 = d2
+mapDib fun Basica d1 = fun d1
+mapDib fun Rotar d1 = Rotar mapDib fun d1
+mapDib fun Rot45 d1 = Rot45 mapDib fun d1
+mapDib fun Espejar d1 = Espejar mapDib fun d1
+mapDib fun Apilar i1 i2 d1 d2 = Apilar i1 i2 mapDib fun d1 mapDib fun d2
+mapDib fun Juntar i1 i2 d1 d2 = Juntar i1 i2 mapDib fun d1 mapDib fun d2
+mapDib fun Encimar d1 d2 = Encimar mapDib fun d1 mapDib fun d2
