@@ -18,7 +18,7 @@ half = (0.5 V.*)
 -- comprender esta función es un buen ejericio.
 hlines :: Vector -> Float -> Float -> [Picture]
 hlines v@(x,y) mag sep = map (hline . (*sep)) [0..]
-  where hline h = line [(x,y+h),(x+mag,y+h)] 
+  where hline h = line [(x,y+h),(x+mag,y+h)]
 
 -- Una grilla de n líneas, comenzando en v con una separación de sep y
 -- una longitud de l (usamos composición para no aplicar este
@@ -44,9 +44,9 @@ simple :: Picture -> FloatingPic
 simple p _ _ _ = p
 
 fShape :: FloatingPic
-fShape a b c = line . map (a V.+) $ [ zero,uX, p13, p33, p33 V.+ uY , p13 V.+ uY 
+fShape a b c = line . map (a V.+) $ [ zero,uX, p13, p33, p33 V.+ uY , p13 V.+ uY
                  , uX V.+ 4 V.* uY ,uX V.+ 5 V.* uY, x4 V.+ y5
-                 , x4 V.+ 6 V.* uY, 6 V.* uY, zero]    
+                 , x4 V.+ 6 V.* uY, 6 V.* uY, zero]
   where p33 = 3 V.* (uX V.+ uY)
         p13 = uX V.+ 3 V.* uY
         x4 = 4 V.* uX
@@ -66,5 +66,5 @@ transf f d (xs,ys) a b c  = translate (fst a') (snd a') .
 
 
 -- Claramente esto sólo funciona para el ejemplo!
-interp :: Output () -> Output (Dibujo ())
-interp f () = f ()
+-- interp :: Output () -> Output (Dibujo ())
+-- interp f () = f ()

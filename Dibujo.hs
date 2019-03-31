@@ -1,4 +1,5 @@
 module Dibujo where
+
 -- definir el lenguaje
 
 -- data Basica a = trian1 a b c | trian2 a | trianD a | rectan a
