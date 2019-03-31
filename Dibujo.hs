@@ -1,5 +1,4 @@
 module Dibujo where
-
 -- definir el lenguaje
 
 -- data Basica a = trian1 a b c | trian2 a | trianD a | rectan a
@@ -91,3 +90,29 @@ sem bas rot esp rot45 api juntar encimar (Espejar d) = rot45 (sem bas rot esp ro
 sem bas rot esp rot45 api juntar encimar (Apilar i1 i2 d1 d2) = api i1 i2 (sem bas rot esp rot45 api juntar encimar d1) (sem bas rot esp rot45 api juntar encimar d2)
 sem bas rot esp rot45 api juntar encimar (Juntar i1 i2 d1 d2) = juntar i1 i2 (sem bas rot esp rot45 api juntar encimar  d1) (sem bas rot esp rot45 api juntar encimar d2)
 sem bas rot esp rot45 api juntar encimar (Encimar d1 d2) = encimar (sem bas rot esp rot45 api juntar encimar d1) (sem bas rot esp rot45 api juntar encimar d2)
+
+type Pred a = a -> Bool
+
+-- dado un predicado sobre básicas, cambiar todas las que satisfacen
+-- el predicado por una figura vacía.
+limpia :: Pred a -> Dibujo a -> Dibujo a
+limpia f d = cambiar (\x -> if (f x) then Vacio else Basica x) d
+
+-- alguna básica satisface el predicado
+anyDib :: Pred a -> Dibujo a -> Bool
+anyDib f d = or (map f (every d))
+
+-- todas las básicas satisfacen el predicadonte
+allDib :: Pred a -> Dibujo a -> Bool
+allDib f d = and (map f (every d))
+
+-- junta todas las figuras básicas de un dibujo
+every :: Dibujo a -> [a]
+every Vacio = []
+every (Basica d1) = [d1]
+every (Rotar d1) = every d1
+every (Rot45 d1) = every d1
+every (Espejar d1) = every d1
+every (Apilar _ _ d1 d2) = every d1 ++ every d2
+every (Juntar _ _ d1 d2) = every d1 ++ every d2
+every (Encimar d1 d2) = every d1 ++ every d2
