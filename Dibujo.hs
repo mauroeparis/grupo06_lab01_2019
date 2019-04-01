@@ -135,3 +135,25 @@ every (Encimar d1 d2) = every d1 ++ every d2
 -- figura.
 contar :: Eq a => Dibujo a -> [(a,Int)]
 contar d = map (\x -> (x, (length . filter( == x)) (every d))) (every d)
+
+-- hay 4 rotaciones seguidas (empezando en el tope)
+esRot360 :: Pred (Dibujo a)
+esRot360 (Rotar(Rotar(Rotar(Rotar d)))) = True
+esRot360 (Basica d) = False
+esRot360 (Rotar d) = esRot360 d
+esRot360 (Rot45 d) = esRot360 d
+esRot360 (Espejar d) = esRot360 d
+esRot360 (Apilar _ _ d1 d2) = (esRot360 d1) || (esRot360 d2)
+esRot360 (Juntar _ _ d1 d2) = (esRot360 d1) || (esRot360 d2)
+esRot360 (Encimar d1 d2) = (esRot360 d1) || (esRot360 d2)
+
+-- hay 2 espejados seguidos (empezando en el tope)
+esFlip2 :: Pred (Dibujo a)
+esFlip2 (Espejar(Espejar d)) = True
+esFlip2 (Basica d) = False
+esFlip2 (Rotar d) = esRot360 d
+esFlip2 (Rot45 d) = esRot360 d
+esFlip2 (Espejar d) = esRot360 d
+esFlip2 (Apilar _ _ d1 d2) = (esRot360 d1) || (esRot360 d2)
+esFlip2 (Juntar _ _ d1 d2) = (esRot360 d1) || (esRot360 d2)
+esFlip2 (Encimar d1 d2) = (esRot360 d1) || (esRot360 d2)
