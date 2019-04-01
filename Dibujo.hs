@@ -106,6 +106,20 @@ anyDib f d = or (map f (every d))
 allDib :: Pred a -> Dibujo a -> Bool
 allDib f d = and (map f (every d))
 
+-- describe la figura. Ejemplos:
+--   desc (Basica b) (const "b") = "b"
+--   desc (Rotar fa) db = "rot (" ++ desc fa db ++ ")"
+-- la descripción de cada constructor son sus tres primeros
+-- símbolos en minúscula.
+desc :: (a -> String) -> Dibujo a -> String
+desc f (Basica d) = f d
+desc f (Rotar d) = "rot (" ++ desc f d ++ ")"
+desc f (Rot45 d) = "rot45 (" ++ desc f d ++ ")"
+desc f (Espejar d) = "esp (" ++ desc f d ++ ")"
+desc f (Apilar _ _ d1 d2) = "api (" ++ desc f d1 ++ ", " ++ desc f d2 ++ ")"
+desc f (Juntar _ _ d1 d2) = "jun (" ++ desc f d1 ++ ", " ++ desc f d2 ++ ")"
+desc f (Encimar d1 d2) = "enc (" ++ desc f d1 ++ ", " ++ desc f d2 ++ ")"
+
 -- junta todas las figuras básicas de un dibujo
 every :: Dibujo a -> [a]
 every Vacio = []
@@ -116,3 +130,8 @@ every (Espejar d1) = every d1
 every (Apilar _ _ d1 d2) = every d1 ++ every d2
 every (Juntar _ _ d1 d2) = every d1 ++ every d2
 every (Encimar d1 d2) = every d1 ++ every d2
+
+-- cuenta la cantidad de veces que aparecen las básicas en una
+-- figura.
+contar :: Eq a => Dibujo a -> [(a,Int)]
+contar d = map (\x -> (x, (length . filter( == x)) (every d))) (every d)
