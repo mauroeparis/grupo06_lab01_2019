@@ -37,7 +37,7 @@ polimorfismo, etc.
 
 Cuando definimos un lenguaje además de dar su sintaxis tenemos que
 explicar qué significan las diferentes construcciones. Podríamos
-pensar que el signficado está implícito en el _nombre_ de cada
+pensar que el significado está implícito en el _nombre_ de cada
 construcción, pero este camino es corto: pues bien podría suceder que
 no entendemos un nombre de una construcción (pongamos un ejemplo
 concreto ¿qué puede significar `***` del DSL Arrows de Haskell?).
@@ -76,7 +76,7 @@ del tamaño de la primera y la segunda figura.
 Usando este lenguaje podemos definir en Haskell funciones que combinan
 programas `<Fig>` para producir otros (usualmente esas funciones se
 llaman _combinadores_), de algún modo estas funciones dan lugar a
-instruccions derivadas (por ejemplo `rotar180 <Fig>` es fácil de
+instrucciones derivadas (por ejemplo `rotar180 <Fig>` es fácil de
 definir como la composición de `Rotar` con `Rotar`).
 
 La semántica formal de las figuras básicas es una función que toma
@@ -274,7 +274,7 @@ la figura original.
 |:--------------------------------------------:|:--------------------------------------------:|
 | ![figura _t_](img/tile_t.png){ width=140px } | ![figura _u_](img/tile_u.png){ width=140px } |
 
-Ya estamos cerca de completar el proceseo, necesitamos un combinador para nueve piezas:
+Ya estamos cerca de completar el proceso, necesitamos un combinador para nueve piezas:
 
 ![noneto](img/nonet.png){ width=140px }
 
@@ -311,7 +311,7 @@ va `lado\ n\ p`, el resto de las letras deben resolverlas ustedes.
   escher = undefined
   ```
 
-Para verlo, pueden usar la función ```descr``` e interpretar la
+Para verlo, pueden usar la función ```desc``` e interpretar la
 descripción!
 
 #### Ver el gráfico ####
@@ -363,7 +363,7 @@ Dibujo.hs        # Tipo de datos para <Figura> y todas las funciones
 Interp.hs        # Interpretación geométrica de las figuras, está bien
                  # si hay figuras que pueden servir para diferentes <Basica>
 Basica/Escher.hs # Definición de combinadores, elección de tipo para
-	             # instanciar Dibujo, definción de la interpretación de
+	             # instanciar Dibujo, definición de la interpretación de
 				 # todas las figuras básicas.
 Basica/Extra.hs  # Si se copan y hacen otros diseños, que estén en el
 	             # directorio Basica
@@ -402,11 +402,11 @@ Se consiguen puntos extras si:
 Si tenés algún Linux debería ser suficiente con que instales el
 paquete de ghc y cabal. Para instalar gloss usamos cabal:
 ```
-` cabal install gloss
+cabal install gloss
 ```
 Podés comprobar que funcione haciendo:
 ```
-` ghci
+ghci
 Prelude> import Graphics.Gloss
 Prelude Graphics.Gloss> let win = InWindow "Paradigmas" (200,200) (0,0)
 Prelude Graphics.Gloss> display win white ` circle 100
@@ -436,4 +436,4 @@ Si al tratar de instalar gloss tiene el siguiente mensaje de error:
 
 pueden solucionarlo instalando las siguientes librerías de sistema.
 
-    ` sudo apt-get install freeglut3 freeglut3-dev
+    sudo apt-get install freeglut3 freeglut3-dev
