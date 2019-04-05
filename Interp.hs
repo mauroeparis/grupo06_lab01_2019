@@ -15,7 +15,7 @@ zero = (0,0)
 half :: Vector -> Vector
 half = (0.5 V.*)
 
--- comprender esta función es un buen ejericio.
+-- comprender esta función es un buen ejercicio.
 hlines :: Vector -> Float -> Float -> [Picture]
 hlines v@(x,y) mag sep = map (hline . (*sep)) [0..]
   where hline h = line [(x,y+h),(x+mag,y+h)]

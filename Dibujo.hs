@@ -106,30 +106,34 @@ anyDib f d = or (map f (every d))
 allDib :: Pred a -> Dibujo a -> Bool
 allDib f d = and (map f (every d))
 
+-- strBasica :: Dibujo a -> String
+-- strBasica _ = "bas"
+
 -- describe la figura. Ejemplos:
 --   desc (Basica b) (const "b") = "b"
 --   desc (Rotar fa) db = "rot (" ++ desc fa db ++ ")"
 -- la descripción de cada constructor son sus tres primeros
--- símbolos en minúscula.
+-- símbolos en minúscula
 desc :: (a -> String) -> Dibujo a -> String
-desc f (Basica d) = f d
-desc f (Rotar d) = "rot (" ++ desc f d ++ ")"
-desc f (Rot45 d) = "rot45 (" ++ desc f d ++ ")"
-desc f (Espejar d) = "esp (" ++ desc f d ++ ")"
-desc f (Apilar _ _ d1 d2) = "api (" ++ desc f d1 ++ ", " ++ desc f d2 ++ ")"
-desc f (Juntar _ _ d1 d2) = "jun (" ++ desc f d1 ++ ", " ++ desc f d2 ++ ")"
-desc f (Encimar d1 d2) = "enc (" ++ desc f d1 ++ ", " ++ desc f d2 ++ ")"
+desc f d = sem f
+               (\x -> "rot (" ++ x ++ ")")
+               (\x -> "esp (" ++ x ++ ")")
+               (\x -> "r45 (" ++ x ++ ")")
+               (\n1 n2 x y -> "api (" ++ x ++ ", " ++ y ++ ")")
+               (\n1 n2 x y -> "jun (" ++ x ++ ", " ++ y ++ ")")
+               (\x y -> "enc (" ++ x ++ ", " ++ y ++ ")")
+               d
 
 -- junta todas las figuras básicas de un dibujo
 every :: Dibujo a -> [a]
-every Vacio = []
-every (Basica d1) = [d1]
-every (Rotar d1) = every d1
-every (Rot45 d1) = every d1
-every (Espejar d1) = every d1
-every (Apilar _ _ d1 d2) = every d1 ++ every d2
-every (Juntar _ _ d1 d2) = every d1 ++ every d2
-every (Encimar d1 d2) = every d1 ++ every d2
+every d = sem (\x -> [x])
+              id
+              id
+              id
+              (\n1 n2 x y -> x ++ y)
+              (\n1 n2 x y -> x ++ y)
+              (\x y -> x ++ y)
+              d
 
 -- cuenta la cantidad de veces que aparecen las básicas en una
 -- figura.
@@ -157,3 +161,38 @@ esFlip2 (Espejar d) = esRot360 d
 esFlip2 (Apilar _ _ d1 d2) = (esRot360 d1) || (esRot360 d2)
 esFlip2 (Juntar _ _ d1 d2) = (esRot360 d1) || (esRot360 d2)
 esFlip2 (Encimar d1 d2) = (esRot360 d1) || (esRot360 d2)
+
+-- la cadena que se toma como parámetro es la descripción
+-- del error.
+check :: Pred (Dibujo a) -> String -> Dibujo a -> Either String (Dibujo a)
+check pre err d | and (map (pre . bas) (every d)) = Right d
+                | otherwise = Left err
+
+-- aplica todos los chequeos y acumula todos los errores,
+-- sólo devuelve la figura si no hubo ningún error.
+todoBien :: Dibujo a -> Either [String] (Dibujo a)
+todoBien d | (esFlip2 d) && (esRot360 d) =
+             Left ["Hay 2 espejados seguidos", "Hay 4 rotaciones seguidas"]
+           | (esFlip2 d) = Left ["Hay 2 espejados seguidos"]
+           | (esRot360 d) = Left ["Hay 4 rotaciones seguidas"]
+           | otherwise = Right d
+
+noRot360 :: Dibujo a -> Dibujo a
+noRot360 (Rotar(Rotar(Rotar(Rotar d)))) = d
+noRot360 (Basica d) = Basica d
+noRot360 (Rotar d) = Rotar (noRot360 d)
+noRot360 (Rot45 d) = Rot45 (noRot360 d)
+noRot360 (Espejar d) = Espejar (noRot360 d)
+noRot360 (Apilar n1 n2 d1 d2) = Apilar n1 n2 (noRot360 d1) (noRot360 d2)
+noRot360 (Juntar n1 n2 d1 d2) = Juntar n1 n2 (noRot360 d1) (noRot360 d2)
+noRot360 (Encimar d1 d2) = Encimar (noRot360 d1) (noRot360 d2)
+
+noFlip2  :: Dibujo a -> Dibujo a
+noFlip2 (Espejar(Espejar d)) = d
+noFlip2 (Basica d) = Basica d
+noFlip2 (Rotar d) = Rotar (noFlip2 d)
+noFlip2 (Rot45 d) = Rot45 (noFlip2 d)
+noFlip2 (Espejar d) = Espejar (noFlip2 d)
+noFlip2 (Apilar n1 n2 d1 d2) = Apilar n1 n2 (noFlip2 d1) (noFlip2 d2)
+noFlip2 (Juntar n1 n2 d1 d2) = Juntar n1 n2 (noFlip2 d1) (noFlip2 d2)
+noFlip2 (Encimar d1 d2) = Encimar (noFlip2 d1) (noFlip2 d2)
