@@ -3,6 +3,11 @@ module Dibujo where
 
 -- data Basica a = trian1 a b c | trian2 a | trianD a | rectan a
 
+data Base = Triangulo1
+            | Triangulo2
+            | TrianguloD
+            | Rectangulo
+
 data Dibujo a = Vacio
               | Basica a
               | Rotar (Dibujo a)
