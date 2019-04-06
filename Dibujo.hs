@@ -21,6 +21,9 @@ comp f n = comp f (n-1) . f
 -- (comp _ 0 a )= a
 -- comp fun n a = comp fun (n-1) (fun a)
 
+rotar45 :: Dibujo a -> Dibujo a
+rotar45 d = Rot45 d
+
 -- rotaciones de múltiplos de 90.
 rot90 :: Dibujo a -> Dibujo a
 rot90 d = Rotar d
