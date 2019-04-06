@@ -8,8 +8,8 @@ data Dibujo a = Vacio
               | Rotar (Dibujo a)
               | Espejar (Dibujo a)
               | Rot45 (Dibujo a)
-              | Apilar Int Int (Dibujo a) (Dibujo a)
-              | Juntar Int Int (Dibujo a) (Dibujo a)
+              | Apilar Float Float (Dibujo a) (Dibujo a)
+              | Juntar Float Float (Dibujo a) (Dibujo a)
               | Encimar (Dibujo a) (Dibujo a)
 
 -- composición n-veces de una función con sí misma.
@@ -59,8 +59,8 @@ ciclar :: Dibujo a -> Dibujo a
 ciclar d = Apilar 50 50 (Juntar 50 50 d (Rotar d)) (Juntar 50 50 (r180 d) (r270 d))
 
 -- ver un a como una figura
-bas :: a -> Dibujo a
-bas x = Basica x
+pureDibe :: a -> Dibujo a
+pureDibe x = Basica x
 
 -- map para nuestro lenguaje
 mapDib :: (a -> b) -> Dibujo a -> Dibujo b
@@ -82,8 +82,8 @@ cambiar fun (Juntar i1 i2 d1 d2) = Juntar i1 i2 (cambiar fun d1) (cambiar fun d2
 cambiar fun (Encimar d1 d2) = Encimar (cambiar fun d1) (cambiar fun d2)
 
 sem :: (a -> b) -> (b -> b) -> (b -> b) -> (b -> b) ->
-       (Int -> Int -> b -> b -> b) ->
-       (Int -> Int -> b -> b -> b) ->
+       (Float -> Float -> b -> b -> b) ->
+       (Float -> Float -> b -> b -> b) ->
        (b -> b -> b) ->
        Dibujo a -> b
 sem bas rot esp rot45 api juntar encimar (Basica d) = bas d
@@ -168,7 +168,7 @@ esFlip2 (Encimar d1 d2) = (esRot360 d1) || (esRot360 d2)
 -- la cadena que se toma como parámetro es la descripción
 -- del error.
 check :: Pred (Dibujo a) -> String -> Dibujo a -> Either String (Dibujo a)
-check pre err d | and (map (pre . bas) (every d)) = Right d
+check pre err d | and (map (pre . pureDibe) (every d)) = Right d
                 | otherwise = Left err
 
 -- aplica todos los chequeos y acumula todos los errores,
