@@ -24,7 +24,7 @@ ej x y = Conf {
 -- pantalla la figura de la misma de acuerdo a la interpretación para
 -- las figuras básicas. Permitimos una computación para poder leer
 -- archivos, tomar argumentos, etc.
-initial :: IO (Conf E.Base) -> IO ()
+initial :: IO (Conf Base) -> IO ()
 initial cf = cf >>= \cfg ->
                   let x  = width cfg
                       y  = height cfg

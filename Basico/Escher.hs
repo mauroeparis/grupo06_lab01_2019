@@ -1,7 +1,6 @@
-module Escher where
+module Basico.Escher where
 
 import Dibujo
-import Basico.Ejemplo
 
 -- supongamos que eligen
 type Escher = Base

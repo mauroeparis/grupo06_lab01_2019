@@ -69,7 +69,7 @@ transf f d (xs,ys) a b c  = translate (fst a') (snd a') .
 -- interp (basic cfg) (fig cfg) (0,0) (x,0) (0,y)
 -- interp :: Output a -> Output (Dibujo a)
 interp :: (a -> FloatingPic) -> Dibujo a -> (FloatingPic)
-interp f (Basica d) v1 v2 v3 = f d v1 v2 v3
+interp f d v1 v2 v3 = sem f rotar espejar rot45 apilar juntar encimar d v1 v2 v3
 
 rotar :: (FloatingPic) -> FloatingPic
 rotar fpic (a, b) (c, d) (e, f) = fpic ((a + c), (b + d)) (e, f) (-c, -d)
