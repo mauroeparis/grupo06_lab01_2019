@@ -5,6 +5,7 @@ import Graphics.Gloss.Geometry.Angle
 import qualified Graphics.Gloss.Data.Point.Arithmetic as V
 
 import Dibujo
+
 type FloatingPic = Vector -> Vector -> Vector -> Picture
 type Output a = a -> FloatingPic
 
@@ -64,11 +65,11 @@ transf f d (xs,ys) a b c  = translate (fst a') (snd a') .
   where ang = radToDeg $ argV b
         a' = a V.+ half (b V.+ c)
 
-
--- Claramente esto sólo funciona para el ejemplo!
--- interp :: Output () -> Output (Dibujo ())
--- interp f () = f ()
+-- type Output a = (a -> Vector -> Vector -> Vector -> Picture) -> (Dibujo a -> Vector -> Vector -> Vector -> Picture)
+-- interp (basic cfg) (fig cfg) (0,0) (x,0) (0,y)
 -- interp :: Output a -> Output (Dibujo a)
+interp :: (a -> FloatingPic) -> Dibujo a -> (FloatingPic)
+interp f (Basica d) v1 v2 v3 = f d v1 v2 v3
 
 rotar :: (FloatingPic) -> FloatingPic
 rotar fpic (a, b) (c, d) (e, f) = fpic ((a + c), (b + d)) (e, f) (-c, -d)
