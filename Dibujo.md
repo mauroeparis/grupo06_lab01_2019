@@ -1,10 +1,10 @@
 ## Lab de Programacion Funcional
 
 En este lab queremos diseñar un lenguaje funcional que nos permita manejar
-dibujos "básicos" o "simples" para poder aplicarles funciones que las
+dibujos "básicos" o "simples" para poder aplicarles funciones que los
 modifiquen y producir así figuras mas complejas compuestas por estas básicas.
 
-El objetivo final es ser capaces de con este lenguaje producir una de las
+El objetivo final es ser capaces de, con este lenguaje, producir una de las
 figuras clásicas de Escher :
 
 ![Square Limit, Escher][image1]
@@ -18,6 +18,15 @@ hacer.
 
 Esta tarea también nos llevó tiempo porque tuvimos que recordar como programar
 en Haskell.
+
+Lo que más nos costó fue entender cuál es la conexión entre el lenguaje, la
+interpretación geométrica y el uso de Gloss.
+
+Las conceptos como `Vacio` que estaban implementadas a medias y los typos en la
+consigna no fueron de ayuda a la hora de implementar las funciones. Además,
+muchos de los comentarios de ayuda en las funciones generaban más confusión.
+
+
 
 <!-- # referencias -->
 
