@@ -68,3 +68,25 @@ transf f d (xs,ys) a b c  = translate (fst a') (snd a') .
 -- Claramente esto sólo funciona para el ejemplo!
 -- interp :: Output () -> Output (Dibujo ())
 -- interp f () = f ()
+-- interp :: Output a -> Output (Dibujo a)
+
+rotar :: (FloatingPic) -> FloatingPic
+rotar fpic (a, b) (c, d) (e, f) = fpic ((a + c), (b + d)) (e, f) (-c, -d)
+
+rot45 :: (FloatingPic) -> FloatingPic
+rot45 fpic (a, b) (c, d) (e, f) = fpic
+                                  (a + (c + e)/2, b + (d + f)/2)
+                                  ((c + e)/2, (d + f)/2)
+                                  ((e - c)/2, (f - d)/2)
+
+espejar :: (FloatingPic) -> FloatingPic
+espejar fpic (a, b) (c, d) (e, f) = fpic ((a + c, b + d)) (-c, -d) (e, f)
+
+encimar :: (FloatingPic) -> (FloatingPic) -> FloatingPic
+encimar fpic1 fpic2 a b c = pictures [fpic1 a b c , fpic2 a b c]
+
+juntar :: Float -> Float -> (FloatingPic) -> (FloatingPic) -> FloatingPic
+juntar n1 n2 fpic1 fpic2 (a, a') (b, b') (c, c') = pictures [fpic1 (a, a') (b*n1/(n2+n1), b'*n1/(n2+n1)) (c, c'), fpic2 (a + (b*n1/(n2+n1)), a' + b'*n1/(n2+n1)) ((b * n1/(n1 + n2)), (b' * n1/(n1 + n2))) (c, c')]
+
+apilar :: Float -> Float -> (FloatingPic) -> (FloatingPic) -> FloatingPic
+apilar n1 n2 fpic1 fpic2 (a, a') (b, b') (c, c') = pictures [fpic1 (a + (b*n1/(n2+n1)), a' + b'*n1/(n2+n1)) ((b * n1/(n1 + n2)), (b' * n1/(n1 + n2))) (c, c'), fpic2 (a, a') (b, b') ((b * n1/(n1 + n2)), (b' * n1/(n1 + n2)))]
