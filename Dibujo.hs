@@ -2,7 +2,8 @@ module Dibujo where
 -- definir el lenguaje
 
 -- data Basica a = trian1 a b c | trian2 a | trianD a | rectan a
-data Base = Triangulo1
+data Base = Blanco
+            | Triangulo1
             | Triangulo2
             | TrianguloD
             | Rectangulo
@@ -18,7 +19,7 @@ data Dibujo a = Vacio
 
 -- composición n-veces de una función con sí misma.
 comp :: (a -> a) -> Int -> (a -> a)
-comp f 0 = f
+comp f 1 = f
 comp f n = comp f (n-1) . f
 
 -- comp :: ((a -> a) -> Int -> a -> a
@@ -30,6 +31,9 @@ rotar45 d = Rot45 d
 -- rotaciones de múltiplos de 90.
 rot90 :: Dibujo a -> Dibujo a
 rot90 d = Rotar d
+
+esp :: Dibujo a -> Dibujo a
+esp d = Espejar d
 
 r180 :: Dibujo a -> Dibujo a
 r180 d = (comp rot90 2) d
@@ -92,8 +96,8 @@ sem :: (a -> b) -> (b -> b) -> (b -> b) -> (b -> b) ->
 sem bas rot esp rot45 api juntar encimar neutro Vacio = neutro
 sem bas rot esp rot45 api juntar encimar neutro (Basica d) = bas d
 sem bas rot esp rot45 api juntar encimar neutro (Rotar d) = rot (sem bas rot esp rot45 api juntar encimar neutro d)
-sem bas rot esp rot45 api juntar encimar neutro (Rot45 d) = esp (sem bas rot esp rot45 api juntar encimar neutro d)
-sem bas rot esp rot45 api juntar encimar neutro (Espejar d) = rot45 (sem bas rot esp rot45 api juntar encimar neutro d)
+sem bas rot esp rot45 api juntar encimar neutro (Rot45 d) = rot45 (sem bas rot esp rot45 api juntar encimar neutro d)
+sem bas rot esp rot45 api juntar encimar neutro (Espejar d) = esp (sem bas rot esp rot45 api juntar encimar neutro d)
 sem bas rot esp rot45 api juntar encimar neutro (Apilar i1 i2 d1 d2) = api i1 i2 (sem bas rot esp rot45 api juntar encimar neutro d1) (sem bas rot esp rot45 api juntar encimar neutro d2)
 sem bas rot esp rot45 api juntar encimar neutro (Juntar i1 i2 d1 d2) = juntar i1 i2 (sem bas rot esp rot45 api juntar encimar neutro  d1) (sem bas rot esp rot45 api juntar encimar neutro d2)
 sem bas rot esp rot45 api juntar encimar neutro (Encimar d1 d2) = encimar (sem bas rot esp rot45 api juntar encimar neutro d1) (sem bas rot esp rot45 api juntar encimar neutro d2)
