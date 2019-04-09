@@ -41,6 +41,9 @@ trianD a b c = line $ map (a V.+) [c, half b , b V.+ c , c]
 rectan :: FloatingPic
 rectan a b c = line [a, a V.+ b, a V.+ b V.+ c, a V.+ c,a]
 
+blanco :: FloatingPic
+blanco a b c = Blank
+
 simple :: Picture -> FloatingPic
 simple p _ _ _ = p
 

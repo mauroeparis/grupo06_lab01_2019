@@ -3,11 +3,6 @@ module Dibujo where
 
 -- data Basica a = trian1 a b c | trian2 a | trianD a | rectan a
 
-data Base = Triangulo1
-            | Triangulo2
-            | TrianguloD
-            | Rectangulo
-
 data Dibujo a = Vacio
               | Basica a
               | Rotar (Dibujo a)
@@ -25,9 +20,6 @@ comp f n = comp f (n-1) . f
 -- comp :: ((a -> a) -> Int -> a -> a
 -- (comp _ 0 a )= a
 -- comp fun n a = comp fun (n-1) (fun a)
-
-rotar45 :: Dibujo a -> Dibujo a
-rotar45 d = Rot45 d
 
 -- rotaciones de múltiplos de 90.
 rot90 :: Dibujo a -> Dibujo a
@@ -89,15 +81,16 @@ cambiar fun (Encimar d1 d2) = Encimar (cambiar fun d1) (cambiar fun d2)
 sem :: (a -> b) -> (b -> b) -> (b -> b) -> (b -> b) ->
        (Float -> Float -> b -> b -> b) ->
        (Float -> Float -> b -> b -> b) ->
-       (b -> b -> b) ->
+       (b -> b -> b) -> b ->
        Dibujo a -> b
-sem bas rot esp rot45 api juntar encimar (Basica d) = bas d
-sem bas rot esp rot45 api juntar encimar (Rotar d) = rot (sem bas rot esp rot45 api juntar encimar d)
-sem bas rot esp rot45 api juntar encimar (Rot45 d) = esp (sem bas rot esp rot45 api juntar encimar d)
-sem bas rot esp rot45 api juntar encimar (Espejar d) = rot45 (sem bas rot esp rot45 api juntar encimar d)
-sem bas rot esp rot45 api juntar encimar (Apilar i1 i2 d1 d2) = api i1 i2 (sem bas rot esp rot45 api juntar encimar d1) (sem bas rot esp rot45 api juntar encimar d2)
-sem bas rot esp rot45 api juntar encimar (Juntar i1 i2 d1 d2) = juntar i1 i2 (sem bas rot esp rot45 api juntar encimar  d1) (sem bas rot esp rot45 api juntar encimar d2)
-sem bas rot esp rot45 api juntar encimar (Encimar d1 d2) = encimar (sem bas rot esp rot45 api juntar encimar d1) (sem bas rot esp rot45 api juntar encimar d2)
+sem bas rot esp rot45 api juntar encimar neutro Vacio = neutro
+sem bas rot esp rot45 api juntar encimar neutro (Basica d) = bas d
+sem bas rot esp rot45 api juntar encimar neutro (Rotar d) = rot (sem bas rot esp rot45 api juntar encimar neutro d)
+sem bas rot esp rot45 api juntar encimar neutro (Rot45 d) = esp (sem bas rot esp rot45 api juntar encimar neutro d)
+sem bas rot esp rot45 api juntar encimar neutro (Espejar d) = rot45 (sem bas rot esp rot45 api juntar encimar neutro d)
+sem bas rot esp rot45 api juntar encimar neutro (Apilar i1 i2 d1 d2) = api i1 i2 (sem bas rot esp rot45 api juntar encimar neutro d1) (sem bas rot esp rot45 api juntar encimar neutro d2)
+sem bas rot esp rot45 api juntar encimar neutro (Juntar i1 i2 d1 d2) = juntar i1 i2 (sem bas rot esp rot45 api juntar encimar neutro  d1) (sem bas rot esp rot45 api juntar encimar neutro d2)
+sem bas rot esp rot45 api juntar encimar neutro (Encimar d1 d2) = encimar (sem bas rot esp rot45 api juntar encimar neutro d1) (sem bas rot esp rot45 api juntar encimar neutro d2)
 
 type Pred a = a -> Bool
 
@@ -130,6 +123,7 @@ desc f d = sem f
                (\n1 n2 x y -> "api (" ++ x ++ ", " ++ y ++ ")")
                (\n1 n2 x y -> "jun (" ++ x ++ ", " ++ y ++ ")")
                (\x y -> "enc (" ++ x ++ ", " ++ y ++ ")")
+               ""
                d
 
 -- junta todas las figuras básicas de un dibujo
@@ -141,6 +135,7 @@ every d = sem (\x -> [x])
               (\n1 n2 x y -> x ++ y)
               (\n1 n2 x y -> x ++ y)
               (\x y -> x ++ y)
+              []
               d
 
 -- cuenta la cantidad de veces que aparecen las básicas en una
