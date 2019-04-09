@@ -2,6 +2,10 @@ module Dibujo where
 -- definir el lenguaje
 
 -- data Basica a = trian1 a b c | trian2 a | trianD a | rectan a
+data Base = Triangulo1
+            | Triangulo2
+            | TrianguloD
+            | Rectangulo
 
 data Dibujo a = Vacio
               | Basica a
@@ -20,6 +24,8 @@ comp f n = comp f (n-1) . f
 -- comp :: ((a -> a) -> Int -> a -> a
 -- (comp _ 0 a )= a
 -- comp fun n a = comp fun (n-1) (fun a)
+rotar45 :: Dibujo a -> Dibujo a
+rotar45 d = Rot45 d
 
 -- rotaciones de múltiplos de 90.
 rot90 :: Dibujo a -> Dibujo a
