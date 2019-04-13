@@ -1,13 +1,22 @@
 module Dibujo where
+-- import Graphics.Gloss
+
+data Colores = Rojo
+             | Azul
+             | Verde
+             | Amarillo
+             | Magenta
+             | Cyan
+             | Rose
+             | Violet
+             | Azure
+             | Aquamarine
+             | Chartreuse
+             | Orange
+             | Black
+             | White
+
 -- definir el lenguaje
-
--- data Basica a = trian1 a b c | trian2 a | trianD a | rectan a
-data Base = Blanco
-            | Triangulo1
-            | Triangulo2
-            | TrianguloD
-            | Rectangulo
-
 data Dibujo a = Vacio
               | Basica a
               | Rotar (Dibujo a)

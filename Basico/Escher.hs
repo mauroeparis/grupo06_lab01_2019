@@ -1,9 +1,50 @@
 module Basico.Escher where
 
+-- import Basico.Escher
 import Dibujo
+import Graphics.Gloss
+import Interp
 
--- supongamos que eligen
-type Escher = Base
+data Base = Blanco
+            | Triangulo1
+            | Triangulo2
+            | TrianguloD
+            | Rectangulo
+
+data BC = BC {
+              forma :: Base,
+              colorbas :: Colores
+             }
+
+type Escher = BC
+
+interpColor :: Colores -> Color
+interpColor Rojo = red
+interpColor Azul = blue
+interpColor Amarillo = yellow
+interpColor Verde = green
+interpColor Magenta = magenta
+interpColor Cyan = cyan
+interpColor Rose = rose
+interpColor Violet = violet
+interpColor Azure = azure
+interpColor Aquamarine = aquamarine
+interpColor Chartreuse = chartreuse
+interpColor Orange = orange
+interpColor Black = black
+interpColor White = white
+
+
+interpForm :: Base -> FloatingPic
+interpForm Blanco = blanco
+interpForm Triangulo1 = trian1
+interpForm Triangulo2 = trian2
+interpForm TrianguloD = trianD
+interpForm Rectangulo = rectan
+
+interpBas :: Output BC
+interpBas bc a b c = color (interpColor (colorbas bc)) $ interpForm (forma bc) a b c
+
 
 -- el dibujo u
 dibujo_u :: Dibujo Escher -> Dibujo Escher
