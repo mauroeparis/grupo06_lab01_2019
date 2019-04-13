@@ -4,8 +4,8 @@ import Graphics.Gloss.Interface.IO.Display
 import Graphics.UI.GLUT.Begin
 import Dibujo
 import Interp
-import qualified Basico.Escher_draw as E
-import qualified Basico.Escher as KK
+-- import qualified Basico.Escher_draw as E
+import qualified Basico.Escher as E
 
 data Conf a = Conf {
     basic :: Output a
@@ -15,8 +15,8 @@ data Conf a = Conf {
   }
 
 ej x y = Conf {
-                basic = KK.interpBas
-              , fig = E.ejemplo
+                basic = E.interpBas
+              , fig = E.dibujo_escher
               , width = x
               , height = y
               }
@@ -25,7 +25,7 @@ ej x y = Conf {
 -- pantalla la figura de la misma de acuerdo a la interpretación para
 -- las figuras básicas. Permitimos una computación para poder leer
 -- archivos, tomar argumentos, etc.
-initial :: IO (Conf KK.BC) -> IO ()
+initial :: IO (Conf E.BC) -> IO ()
 initial cf = cf >>= \cfg ->
                   let x  = width cfg
                       y  = height cfg

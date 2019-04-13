@@ -1,21 +1,6 @@
 module Dibujo where
 -- import Graphics.Gloss
 
-data Colores = Rojo
-             | Azul
-             | Verde
-             | Amarillo
-             | Magenta
-             | Cyan
-             | Rose
-             | Violet
-             | Azure
-             | Aquamarine
-             | Chartreuse
-             | Orange
-             | Black
-             | White
-
 -- definir el lenguaje
 data Dibujo a = Vacio
               | Basica a
