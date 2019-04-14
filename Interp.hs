@@ -47,6 +47,20 @@ blanco a b c = Blank
 cuadrado :: FloatingPic
 cuadrado a b c = line $ map (a V.+) [zero, c, (c V.+ b), b, zero]
 
+curvita :: FloatingPic
+curvita a b c = line $ bezier a (a V.+ b V.+((1/3) V.* c)) (a V.+ b V.+ c) 10
+
+bezier :: Vector -> Vector -> Vector -> Int -> [Vector]
+bezier p0 p1 p2 n = [ p1 V.+ (((1-t)^2) V.* (p0 V.+ (negar p1))) V.+ ((t^2) V.*
+                    (p2 V.+ (negar p1))) | t <- ts]
+  where ts = 0:map (divF n) [1..n]
+
+negar :: Vector -> Vector
+negar (x,y) = (-x,-y)
+
+divF :: Int -> Int -> Float
+divF j i = toEnum i / toEnum j
+
 simple :: Picture -> FloatingPic
 simple p _ _ _ = p
 
@@ -75,20 +89,16 @@ transf f d (xs,ys) a b c  = translate (fst a') (snd a') .
 -- interp (basic cfg) (fig cfg) (0,0) (x,0) (0,y)
 -- interp :: Output a -> Output (Dibujo a)
 interp :: (a -> FloatingPic) -> Dibujo a -> (FloatingPic)
-interp f d v1 v2 v3 = sem f rotar espejar rot45 apilar juntar encimar blanco d v1 v2 v3
+interp f d v1 v2 v3 = sem f rotar espejar rot45 apilar juntar encimar blanco
+                      d v1 v2 v3
 
 rotar :: (FloatingPic) -> FloatingPic
-rotar fpic (a, b) (c, d) (e, f) = fpic ((a + c), (b + d)) (e, f) (-c, -d)
+rotar fpic a b c = fpic (a V.+ b) c (negar b)
 
 rot45 :: (FloatingPic) -> FloatingPic
--- p(a+(b+c)/2,(b+c)/2,(c-b)/2
 rot45 fpic a b c = fpic (a V.+ half (b V.+ c))
                         (half (b V.+ c))
                         (half (c V.+ (V.negate b)))
--- rot45 fpic (a, b) (c, d) (e, f) = fpic
---                                   (a + (c + e)/2, b + (d + f)/2)
---                                   ((c + e)/2, (d + f)/2)
---                                   ((e - c)/2, (f - d)/2)
 
 espejar :: (FloatingPic) -> FloatingPic
 espejar fpic (a, b) (c, d) (e, f) = fpic ((a + c, b + d)) (-c, -d) (e, f)
@@ -97,7 +107,11 @@ encimar :: (FloatingPic) -> (FloatingPic) -> FloatingPic
 encimar fpic1 fpic2 a b c = pictures [fpic1 a b c , fpic2 a b c]
 
 juntar :: Float -> Float -> (FloatingPic) -> (FloatingPic) -> FloatingPic
-juntar n1 n2 fpic1 fpic2 (a, a') (b, b') (c, c') = pictures [fpic1 (a, a') (b*n1/(n2+n1), b'*n1/(n2+n1)) (c, c'), fpic2 (a + (b*n1/(n2+n1)), a' + b'*n1/(n2+n1)) ((b * n2/(n1 + n2)), (b' * n2/(n1 + n2))) (c, c')]
+juntar n1 n2 fpic1 fpic2 a b c = pictures [fpic1 a (r' V.* b) c,
+                                 fpic2 (a V.+ (r' V.* b)) (r V.* b) c]
+    where r' = n1 / (n2+n1)
+          r = n2 / (n1 + n2)
+
 
 apilar :: Float -> Float -> (FloatingPic) -> (FloatingPic) -> FloatingPic
 apilar n m p q a b c = pictures [p (a V.+ c'') b c', q a b c'']
@@ -105,5 +119,3 @@ apilar n m p q a b c = pictures [p (a V.+ c'') b c', q a b c'']
           r = m / (n + m)
           c' = r' V.* c
           c'' = r V.* c
-
--- apilar n1 n2 fpic1 fpic2 (a, a') (b, b') (c, c') = pictures [fpic1 (a + (b*n1/(n2+n1)), a' + b'*n1/(n2+n1)) ((b * n1/(n1 + n2)), (b' * n1/(n1 + n2))) (c, c'), fpic2 (a, a') (b, b') ((b * n1/(n1 + n2)), (b' * n1/(n1 + n2)))]

@@ -57,7 +57,8 @@ encimar4 d = Encimar (Encimar d (Rotar d)) (Encimar (r180 d) (r270 d))
 
 -- cuadrado con la misma figura rotada `i` por `90` para `i \in \{1..3\}`.
 ciclar :: Dibujo a -> Dibujo a
-ciclar d = Apilar 50 50 (Juntar 50 50 d (Rotar d)) (Juntar 50 50 (r180 d) (r270 d))
+ciclar d = Apilar 50 50 (Juntar 50 50 d (Rotar d)) (Juntar 50 50 (r180 d)
+           (r270 d))
 
 -- ver un a como una figura
 pureDibe :: a -> Dibujo a
@@ -78,8 +79,10 @@ cambiar fun (Basica d1) = fun d1
 cambiar fun (Rotar d1) = Rotar (cambiar fun d1)
 cambiar fun (Rot45 d1) = Rot45 (cambiar fun d1)
 cambiar fun (Espejar d1) = Espejar (cambiar fun d1)
-cambiar fun (Apilar i1 i2 d1 d2) = Apilar i1 i2 (cambiar fun d1) (cambiar fun d2)
-cambiar fun (Juntar i1 i2 d1 d2) = Juntar i1 i2 (cambiar fun d1) (cambiar fun d2)
+cambiar fun (Apilar i1 i2 d1 d2) = Apilar i1 i2 (cambiar fun d1)
+                                   (cambiar fun d2)
+cambiar fun (Juntar i1 i2 d1 d2) = Juntar i1 i2 (cambiar fun d1)
+                                   (cambiar fun d2)
 cambiar fun (Encimar d1 d2) = Encimar (cambiar fun d1) (cambiar fun d2)
 
 sem :: (a -> b) -> (b -> b) -> (b -> b) -> (b -> b) ->
@@ -89,12 +92,21 @@ sem :: (a -> b) -> (b -> b) -> (b -> b) -> (b -> b) ->
        Dibujo a -> b
 sem bas rot esp rot45 api juntar encimar neutro Vacio = neutro
 sem bas rot esp rot45 api juntar encimar neutro (Basica d) = bas d
-sem bas rot esp rot45 api juntar encimar neutro (Rotar d) = rot (sem bas rot esp rot45 api juntar encimar neutro d)
-sem bas rot esp rot45 api juntar encimar neutro (Rot45 d) = rot45 (sem bas rot esp rot45 api juntar encimar neutro d)
-sem bas rot esp rot45 api juntar encimar neutro (Espejar d) = esp (sem bas rot esp rot45 api juntar encimar neutro d)
-sem bas rot esp rot45 api juntar encimar neutro (Apilar i1 i2 d1 d2) = api i1 i2 (sem bas rot esp rot45 api juntar encimar neutro d1) (sem bas rot esp rot45 api juntar encimar neutro d2)
-sem bas rot esp rot45 api juntar encimar neutro (Juntar i1 i2 d1 d2) = juntar i1 i2 (sem bas rot esp rot45 api juntar encimar neutro  d1) (sem bas rot esp rot45 api juntar encimar neutro d2)
-sem bas rot esp rot45 api juntar encimar neutro (Encimar d1 d2) = encimar (sem bas rot esp rot45 api juntar encimar neutro d1) (sem bas rot esp rot45 api juntar encimar neutro d2)
+sem bas rot esp rot45 api juntar encimar neutro (Rotar d) =
+  rot (sem bas rot esp rot45 api juntar encimar neutro d)
+sem bas rot esp rot45 api juntar encimar neutro (Rot45 d) =
+  rot45 (sem bas rot esp rot45 api juntar encimar neutro d)
+sem bas rot esp rot45 api juntar encimar neutro (Espejar d) =
+  esp (sem bas rot esp rot45 api juntar encimar neutro d)
+sem bas rot esp rot45 api juntar encimar neutro (Apilar i1 i2 d1 d2) =
+  api i1 i2 (sem bas rot esp rot45 api juntar encimar neutro d1)
+  (sem bas rot esp rot45 api juntar encimar neutro d2)
+sem bas rot esp rot45 api juntar encimar neutro (Juntar i1 i2 d1 d2) =
+  juntar i1 i2 (sem bas rot esp rot45 api juntar encimar neutro  d1)
+  (sem bas rot esp rot45 api juntar encimar neutro d2)
+sem bas rot esp rot45 api juntar encimar neutro (Encimar d1 d2) =
+  encimar (sem bas rot esp rot45 api juntar encimar neutro d1)
+  (sem bas rot esp rot45 api juntar encimar neutro d2)
 
 type Pred a = a -> Bool
 

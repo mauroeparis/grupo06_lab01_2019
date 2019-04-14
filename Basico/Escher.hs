@@ -9,6 +9,7 @@ data Base = Blanco
             | Triangulo2
             | TrianguloD
             | Rectangulo
+            | Curva
 
 data Colores = Rojo
              | Azul
@@ -48,29 +49,31 @@ interpColor Orange = orange
 interpColor Black = black
 interpColor White = white
 
-
 interpForm :: Base -> FloatingPic
 interpForm Blanco = blanco
 interpForm Triangulo1 = trian1
 interpForm Triangulo2 = trian2
 interpForm TrianguloD = trianD
 interpForm Rectangulo = rectan
+interpForm Curva = curvita
 
 interpBas :: Output BC
-interpBas bc a b c = color (interpColor (colorbas bc)) $ interpForm (forma bc) a b c
+interpBas bc a b c = color (interpColor (colorbas bc)) $ interpForm (forma bc)
+                     a b c
 
 myBC :: BC
 myBC = BC {forma = Triangulo2, colorbas = Azure}
 
 dibujo_escher :: Dibujo BC
-dibujo_escher = escher 4 myBC
+dibujo_escher = escher 5 myBC
 
 
 ------------ CONSTRUCCION DEL DIBUJO DE ESCHER ------------
 
 -- el dibujo u
 dibujo_u :: Dibujo Escher -> Dibujo Escher
-dibujo_u escher = (escher2 ^^^ (rot90 escher2)) ^^^ ((r180 escher2) ^^^ (r270 escher2))
+dibujo_u escher = (escher2 ^^^ (rot90 escher2)) ^^^ ((r180 escher2) ^^^
+                  (r270 escher2))
                   where escher2 = esp $ rotar45 escher
 
 -- el dibujo t
@@ -81,15 +84,20 @@ dibujo_t escher = escher ^^^ (escher2 ^^^ escher3)
 
 -- -- lado con nivel de detalle
 lado :: Float -> Dibujo Escher -> Dibujo Escher
-lado 1 escher = (.-.) ((///) Vacio Vacio) ((///) (rot90(dibujo_t escher)) (dibujo_t escher))
-lado 2 escher = (.-.) ((///) (lado 1 escher) (lado 1 escher)) ((///) (rot90(dibujo_t escher)) (dibujo_t escher))
-lado n escher = (.-.) ((///) (lado (n-1) escher) (lado (n-1) escher)) ((///) (rot90(dibujo_t escher)) (dibujo_t escher))
+lado 1 escher = (.-.) ((///) Vacio Vacio) ((///) (rot90(dibujo_t escher))
+                (dibujo_t escher))
+lado 2 escher = (.-.) ((///) (lado 1 escher) (lado 1 escher)) ((///)
+                (rot90(dibujo_t escher)) (dibujo_t escher))
+lado n escher = (.-.) ((///) (lado (n-1) escher) (lado (n-1) escher))
+                ((///) (rot90(dibujo_t escher)) (dibujo_t escher))
 
 -- esquina con nivel de detalle en base a la figura p
 esquina :: Float -> Dibujo Escher -> Dibujo Escher
 esquina 1 escher = (.-.) ((///) Vacio Vacio) ((///) Vacio (dibujo_u escher))
-esquina 2 escher = (.-.) ((///) (esquina 1 escher) (lado 1 escher)) ((///) (rot90(lado 1 escher)) (dibujo_u escher))
-esquina n escher = (.-.) ((///) (esquina (n-1) escher) (lado (n-1) escher)) ((///) (rot90(lado (n-1) escher)) (dibujo_u escher))
+esquina 2 escher = (.-.) ((///) (esquina 1 escher) (lado 1 escher)) ((///)
+                   (rot90(lado 1 escher)) (dibujo_u escher))
+esquina n escher = (.-.) ((///) (esquina (n-1) escher) (lado (n-1) escher))
+                   ((///) (rot90(lado (n-1) escher)) (dibujo_u escher))
 
 -- -- por suerte no tenemos que poner el tipo!
 noneto p q r s t u v w x = Apilar 1 2 (Juntar 1 2 p (Juntar 1 1 q r)) (

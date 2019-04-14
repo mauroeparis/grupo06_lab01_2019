@@ -29,10 +29,10 @@ initial :: IO (Conf E.BC) -> IO ()
 initial cf = cf >>= \cfg ->
                   let x  = width cfg
                       y  = height cfg
-                  in display win white -- . withGrid
-                      $ interp (basic cfg) (fig cfg) (0,0) (x,0) (0,y)
+                  in display win black -- . withGrid
+                      $ interp (basic cfg) (fig cfg) (-350,-350) (x,0) (0,y)
   where withGrid p = pictures [p, color grey $ grid 10 (0,0) 10 100]
         grey = makeColorI 120 120 120 120
 
-win = InWindow "Nice Window" (500, 500) (0, 0)
-main = initial $ return (ej 250 250)
+win = InWindow "Nice Window" (750, 750) (0, 0)
+main = initial $ return (ej 700 700)
