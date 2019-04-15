@@ -27,6 +27,18 @@ consigna no fueron de ayuda a la hora de implementar las funciones. Además,
 muchos de los comentarios de ayuda en las funciones generaban más confusión.
 
 
+### Extras
+
+Pudimos implementar como item extra que las figuras de escher se vieran
+dibujadas con colores distintos, se puede elegir entre 14 colores reemplazando
+en el archivo `escher.hs` el atributo `colorbas` dentro de `myBC` por cualquiera
+del datatype `Colores`.
+
+En la rama llamada `fish` intentamos también ser capaces de cargar imágenes bmp
+y así dibujar Escher pero en vez de triángulos con pescados. Creamos una nueva
+función `interpBasbmp` para ser capaces de admitir un bmp y poder generar una
+figura para representar en `Escher.hs`. Esto quedó incompleto porque solo
+pudimos cargar el bmp sin poder componerlo y generarlo correctamente.
 
 <!-- # referencias -->
 
